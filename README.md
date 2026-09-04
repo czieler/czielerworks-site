@@ -64,3 +64,6 @@ V16: Reduced napkin illustration size and bottom-aligned the Services copy with 
 
 
 V18: Connected footer/social links to Carole's GitHub and LinkedIn profiles and confirmed public contact links use hello@czielerworks.app.
+
+
+V19: Fixed mobile/tablet hero stacking and overflow. The hero now grows with its content instead of using the desktop fixed viewport height, preventing overlap with buttons and value cards.

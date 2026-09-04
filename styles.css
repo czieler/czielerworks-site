@@ -752,3 +752,145 @@ img { display: block; max-width: 100%; }
     grid-row: 5;
   }
 }
+
+
+/* V19: mobile/tablet layout fix */
+@media (max-width: 1000px) {
+  /* The desktop hero used a fixed viewport height. Once it stacks into
+     two rows on smaller screens, that fixed height causes the copy,
+     buttons and value cards to overlap. Let the content define height. */
+  .hero {
+    height: auto;
+    min-height: 0;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    align-items: start;
+    gap: 12px;
+    padding-top: 18px;
+    padding-bottom: 42px;
+  }
+
+  .hero-art {
+    height: auto;
+    min-height: 0;
+    padding: 10px 0 4px;
+    overflow: hidden;
+  }
+
+  .hero-art img {
+    width: min(92vw, 520px);
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  .hero-copy {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
+  }
+
+  .value-strip {
+    position: relative;
+    clear: both;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .section-shell,
+  .site-header,
+  .site-footer {
+    width: calc(100% - 28px);
+  }
+
+  .site-header {
+    min-height: 64px;
+  }
+
+  .site-nav {
+    top: 66px;
+    left: 14px;
+    right: 14px;
+  }
+
+  .hero {
+    gap: 8px;
+    padding-top: 8px;
+    padding-bottom: 30px;
+  }
+
+  .hero-art {
+    padding-top: 0;
+  }
+
+  .hero-art img {
+    width: min(94vw, 390px);
+  }
+
+  .hero h1 {
+    font-size: clamp(2.2rem, 11vw, 3.15rem);
+    line-height: .98;
+  }
+
+  .hero-description {
+    margin: 14px 0 18px;
+    font-size: .95rem;
+  }
+
+  .hero-actions {
+    gap: 10px;
+  }
+
+  .hero-actions .button {
+    flex: 1 1 150px;
+  }
+
+  .hero-points {
+    margin-top: 18px;
+    gap: 8px;
+  }
+
+  .value-strip {
+    margin-top: 0;
+  }
+
+  .story-section,
+  .contact-section {
+    padding-block: 64px;
+  }
+
+  .display-heading,
+  .contact-box .display-heading {
+    font-size: clamp(2.15rem, 10vw, 3.1rem);
+  }
+
+  .feature-card {
+    margin-top: 34px;
+  }
+
+  .feature-copy,
+  .service-grid article,
+  .project-card {
+    padding: 24px;
+  }
+
+  .feature-art {
+    min-height: 270px;
+  }
+
+  .contact-box {
+    padding: 26px;
+  }
+
+  .site-footer {
+    text-align: center;
+  }
+
+  .social-links {
+    justify-content: center;
+  }
+}
