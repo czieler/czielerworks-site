@@ -14,68 +14,33 @@
   <link rel="stylesheet" href="./styles.css" />
 
   <script>
+    // Applies the session theme's colors before first paint (no color flash).
+    // Keep these colors in sync with the theme list in app.js.
     (() => {
       const SESSION_KEY = "czielerworks-theme";
-      const themes = [
-  {
-    id: "deep-navy-orange",
-    logo: "./assets/logos/01_deep_navy_orange_neon_amber.png",
-    napkin: "./assets/napkins/napkin-theme-01.png",
-    primary: "#071B4A",
-    secondary: "#E76A32",
-    accent: "#FFB000"
-  },
-  {
-    id: "blue-orange",
-    logo: "./assets/logos/02_blue_orange_electric_cyan.png",
-    napkin: "./assets/napkins/napkin-theme-02.png",
-    primary: "#085CCD",
-    secondary: "#E76A32",
-    accent: "#00C7FF"
-  },
-  {
-    id: "deep-cyan-burnt-orange",
-    logo: "./assets/logos/03_deep_cyan_burnt_orange_lime.png",
-    napkin: "./assets/napkins/napkin-theme-03.png",
-    primary: "#00606C",
-    secondary: "#D84E1F",
-    accent: "#97CD00"
-  },
-  {
-    id: "light-blue-orange",
-    logo: "./assets/logos/04_light_blue_orange_neon_blue.png",
-    napkin: "./assets/napkins/napkin-theme-04.png",
-    primary: "#2F6FAE",
-    secondary: "#E76A32",
-    accent: "#5A8FCE"
-  },
-  {
-    id: "amethyst-teal",
-    logo: "./assets/logos/06_amethyst_purple_teal_chartreuse.png",
-    napkin: "./assets/napkins/napkin-theme-06.png",
-    primary: "#5B239A",
-    secondary: "#00777E",
-    accent: "#AED600"
-  }
-];
-      let themeIndex = Number(sessionStorage.getItem(SESSION_KEY));
-
-      if (!Number.isInteger(themeIndex) || themeIndex < 0 || themeIndex >= themes.length) {
-        themeIndex = Math.floor(Math.random() * themes.length);
-        sessionStorage.setItem(SESSION_KEY, String(themeIndex));
+      const colors = {
+        "deep-navy-orange":       ["#071B4A", "#E76A32", "#FFB000"],
+        "blue-orange":            ["#085CCD", "#E76A32", "#00C7FF"],
+        "deep-cyan-burnt-orange": ["#00606C", "#D84E1F", "#97CD00"],
+        "light-blue-orange":      ["#2F6FAE", "#E76A32", "#5A8FCE"],
+        "amethyst-teal":          ["#5B239A", "#00777E", "#AED600"]
+      };
+      const ids = Object.keys(colors);
+      let id = null;
+      try { id = sessionStorage.getItem(SESSION_KEY); } catch (e) {}
+      if (!colors[id]) {
+        id = ids[Math.floor(Math.random() * ids.length)];
+        try { sessionStorage.setItem(SESSION_KEY, id); } catch (e) {}
       }
-
-      const theme = themes[themeIndex];
+      const [primary, secondary, accent] = colors[id];
       const root = document.documentElement;
-
-      Object.entries(theme.vars).forEach(([name, value]) => {
-        root.style.setProperty(name, value);
-      });
-
-      root.dataset.themeIndex = String(themeIndex);
+      root.style.setProperty("--primary", primary);
+      root.style.setProperty("--secondary", secondary);
+      root.style.setProperty("--accent", accent);
+      root.style.setProperty("--text", primary);
+      root.dataset.theme = id;
     })();
   </script>
-
 </head>
 <body>
   <header class="site-header home-header">
@@ -85,16 +50,15 @@
     </button>
 
     <nav id="siteNav" class="site-nav" aria-label="Primary navigation">
-      <a href="#about">About</a>
-      <a href="#apps">Apps</a>
       <a href="#services">Services</a>
+      <a href="#how-i-work">How I work</a>
       <a href="#projects">Projects</a>
+      <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
 
     <a class="button button-outline header-cta" href="#contact">
-      <span aria-hidden="true">♙</span>
-      Let’s Connect
+      Let’s talk
       <span aria-hidden="true">→</span>
     </a>
   </header>
@@ -106,140 +70,164 @@
       </div>
 
       <div class="hero-copy">
-        <p class="eyebrow">CZieler Works</p>
+        <p class="eyebrow">CZieler Works · Web &amp; mobile apps</p>
         <h1>
-          Ideas become apps.<br>
-          <span class="secondary-text">Apps create impact.</span><br>
-          Let’s build something great.
+          I turn rough ideas and clunky tools into apps people
+          <span class="secondary-text">actually enjoy&nbsp;using.</span>
         </h1>
 
         <p class="hero-description">
-          I design and develop modern web and mobile apps that are reliable,
-          intuitive, and built to solve real problems and make a difference.
+          Hi, I’m Carole, a software engineer with 25+ years of experience.
+          I design and build web and mobile apps for individuals, small businesses
+          and teams, from the first sketch to launch.
         </p>
 
         <div class="hero-actions">
-          <a class="button button-primary" href="#apps">Explore Apps <span aria-hidden="true">→</span></a>
-          <a class="button button-outline" href="#projects">See My Work</a>
-        </div>
-
-        <div class="hero-points" aria-label="What I value">
-          <span>✓ User-focused design</span>
-          <span>✓ Creative problem solving</span>
-          <span>✓ Reliable &amp; scalable code</span>
-          <span>✓ Built with passion</span>
+          <a class="button button-primary" href="#contact">Tell me your idea <span aria-hidden="true">→</span></a>
+          <a class="button button-outline" href="#projects">See my work</a>
         </div>
       </div>
     </section>
 
     <section class="value-strip section-shell" aria-label="CZieler Works values">
       <article>
-        <div class="value-icon">💡</div>
+        <div class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z"/></svg>
+        </div>
         <div><h2>Ideas</h2><p>Creative solutions that start with real problems.</p></div>
       </article>
       <article>
-        <div class="value-icon">▣</div>
+        <div class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>
+        </div>
         <div><h2>Apps</h2><p>User-friendly apps built for everyday people.</p></div>
       </article>
       <article>
-        <div class="value-icon">&lt;/&gt;</div>
+        <div class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5"/><path d="M16 7l5 5-5 5"/><path d="M14 4l-4 16"/></svg>
+        </div>
         <div><h2>Solutions</h2><p>Custom development that drives real results.</p></div>
       </article>
       <article>
-        <div class="value-icon">♡</div>
+        <div class="value-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+        </div>
         <div><h2>Passion</h2><p>Built with care, curiosity, and a geek at heart.</p></div>
       </article>
     </section>
 
-
-    <section id="apps" class="story-section apps-section">
-  <div class="section-shell">
-    <div class="section-kicker">APPS</div>
-    <div class="section-heading-row">
-      <h2 class="display-heading">Useful software.<br><span>Built for actual humans.</span></h2>
-      <p class="section-lede">I like building apps that solve real problems without making people learn a complicated system first. The goal is simple: make something useful, intuitive, and maybe even a little fun to use.</p>
-    </div>
-    <article class="feature-card">
-      <div class="feature-copy">
-        <div class="pill">FEATURED APP</div>
-        <h3>Where I’m Watching</h3>
-        <p class="tagline">Finally, an answer to “Wait… what streaming service was that show on?”</p>
-        <p>Track what you're watching, where you're watching it, and what you want to watch next—without turning your entertainment list into another chore.</p>
-        <div class="actions">
-          <a class="button button-primary" href="https://wiw.czielerworks.app">Explore Where I’m Watching <span>→</span></a>
-          <a class="text-link" href="#projects">See my projects →</a>
+    <section id="services" class="story-section services-section">
+      <div class="section-shell">
+        <div class="services-head">
+          <div>
+            <div class="section-kicker">Services</div>
+            <h2 class="display-heading">Got a napkin sketch or an app<br><span>that drives people crazy? I can help.</span></h2>
+          </div>
+          <img id="napkinArt" class="napkin-art" src="./assets/napkins/napkin-theme-01.png" alt="A playful napkin doodle brainstorming an app idea">
+        </div>
+        <div class="step-grid">
+          <article><h3>1. Build it</h3><p>Web and mobile apps, from a rough idea to a working product people can use.</p></article>
+          <article><h3>2. Fix it</h3><p>Existing apps that are confusing or frustrating, made clear and easy to use.</p></article>
+          <article><h3>3. Figure it out</h3><p>UX, architecture, prototypes and technical planning before you commit to a build.</p></article>
         </div>
       </div>
-      <div class="feature-art" aria-hidden="true"><div class="mini-tv"><span>?</span></div><b class="spark s1">✦</b><b class="spark s2">✦</b></div>
-    </article>
-  </div>
-</section>
+    </section>
 
-    <section id="services" class="story-section services-section">
-  <div class="section-shell">
-    <div class="section-kicker">SERVICES</div>
-    <h2 class="display-heading">Got an app idea<br><span>scribbled on a napkin?</span></h2>
-    <p class="section-lede service-lede">You don't need a technical spec, a development team, or even all the answers yet. If you've got an idea for a web or mobile app, I can help figure out what it should do, how it should work, and how to turn it into something real.</p>
-    <div class="napkin-service-layout">
-      <div class="napkin-copy-spacer" aria-hidden="true"></div>
-      <div class="napkin-art-wrap">
-        <img id="napkinArt" class="napkin-art" src="./assets/napkins/napkin-theme-01.png" alt="A playful napkin doodle brainstorming an app idea">
+    <section id="how-i-work" class="story-section how-section">
+      <div class="section-shell">
+        <div class="section-kicker">How I work</div>
+        <h2 class="display-heading">Clear steps, honest estimates,<br><span>no surprises.</span></h2>
+        <div class="step-grid">
+          <article><h3>1. Discovery week</h3><p>A short, paid first step. I review what you have and how your team works, then give you a plan and an hour estimate.</p></article>
+          <article><h3>2. Build in phases</h3><p>Each phase has a clear goal and an hour cap. You get weekly updates and approve each phase before the next one starts.</p></article>
+          <article><h3>3. Launch and support</h3><p>Bug fixes are included for 30 days after launch, with ongoing support available when you need it.</p></article>
+        </div>
       </div>
-    </div>
-    <div class="service-grid">
-      <article><em>01</em><h3>Build it.</h3><p>Web and mobile app development from rough idea to working product.</p></article>
-      <article><em>02</em><h3>Fix it.</h3><p>Have an existing app that's frustrating you? Let's make it cleaner, easier, and better to use.</p></article>
-      <article><em>03</em><h3>Figure it out.</h3><p>UX, architecture, prototypes, technical planning, and “is this even possible?” conversations.</p></article>
-    </div>
-    <a class="button primary section-button" href="#contact">Tell me your idea <span>→</span></a>
-  </div>
-</section>
+    </section>
 
     <section id="projects" class="story-section projects-section">
-  <div class="section-shell">
-    <div class="section-kicker">PROJECTS</div>
-    <h2 class="display-heading">Things I’m building<br><span>because I can’t help myself.</span></h2>
-    <p class="project-intro">Some projects start with a problem. Some start with curiosity. And some start with me thinking, <strong>“There has GOT to be a better way to do this.”</strong></p>
-    <div class="project-grid">
-      <article class="project-card highlight">
-        <div class="pill">LIVE</div><h3>Where I’m Watching</h3>
-        <p>A TV tracking app for remembering what you're watching, where it lives, and what comes next.</p>
-        <div class="tags"><span>React</span><span>TypeScript</span><span>Supabase</span><span>iOS</span></div>
-        <a class="text-link" href="https://wiw.czielerworks.app">Open the app →</a>
-      </article>
-      <article class="project-card">
-        <div class="pill lab">IN THE LAB</div><h3>Reusable Component Library</h3>
-        <p>A growing collection of practical UI components built to save time and keep app experiences consistent.</p>
-        <div class="tags"><span>React</span><span>SCSS</span><span>Responsive UI</span></div>
-      </article>
-      <article class="project-card">
-        <div class="pill lab">IN THE LAB</div><h3>Whatever problem bugs me next.</h3>
-        <p>Experiments, utilities, and side projects that usually begin with one dangerous thought: “I could build that.”</p>
-        <div class="tags"><span>Ideas</span><span>Experiments</span><span>Too many tabs</span></div>
-      </article>
-    </div>
-  </div>
-</section>
+      <div class="section-shell">
+        <div class="section-kicker">Projects</div>
+        <h2 class="display-heading">Things I’ve built</h2>
+        <div class="project-grid">
+          <article class="project-card highlight">
+            <div class="project-card__top">
+              <img class="app-icon" src="./assets/apps/where-im-watching-icon.png" alt="Where I’m Watching app icon" width="56" height="56">
+              <div class="pill live">LIVE ON THE APP STORE</div>
+            </div>
+            <h3>Where I’m Watching</h3>
+            <p>Your streaming watchlist. Log what you’re watching, where you’re watching it, and what’s next.</p>
+            <div class="tags"><span>React</span><span>TypeScript</span><span>Supabase</span><span>iOS</span></div>
+            <div class="card-links">
+              <a class="text-link" href="https://apps.apple.com/us/app/where-im-watching/id6807973271">App Store →</a>
+              <a class="text-link" href="https://wiw.czielerworks.app">Web app →</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="pill lab">IN THE LAB</div>
+            <h3>Reusable Component Library</h3>
+            <p>A growing set of responsive UI building blocks that make new apps faster to build and consistent to use.</p>
+            <div class="tags"><span>React</span><span>SCSS</span><span>Responsive UI</span></div>
+            <div class="card-links">
+              <a class="text-link" href="https://github.com/czieler">See it on GitHub →</a>
+            </div>
+          </article>
+          <article class="project-card">
+            <div class="pill lab">IN THE LAB</div>
+            <h3>SaaS Project</h3>
+            <p>A new SaaS tool in the works for teams who want to get more out of the tools they already use. More soon.</p>
+            <div class="tags"><span>SaaS</span><span>Coming soon</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
 
     <section id="about" class="story-section about-section">
-  <div class="section-shell about-grid">
-    <div>
-      <div class="section-kicker">ABOUT CZIELER WORKS</div>
-      <h2 class="display-heading">30+ years of code.<br><span>Still a geek at heart.</span></h2>
-    </div>
-    <div class="about-copy">
-      <p>I've spent my career building software, solving problems, mentoring developers, and figuring out how to make complicated things work better. CZieler Works is where I bring all of that experience together—with room to experiment, build things I believe should exist, and help other people turn their ideas into working software.</p>
-      <p class="fun-line">Code. Dogs. Superhero movies.<br>Probably too many side projects.</p>
-    </div>
-  </div>
-</section>
+      <div class="section-shell about-grid">
+        <div>
+          <div class="section-kicker">About</div>
+          <h2 class="display-heading">25+ years of code.<br><span>Still a geek at heart.</span></h2>
+        </div>
+        <div class="about-copy">
+          <p>I’m Carole Zieler. I’ve spent more than 25 years building software, mentoring developers and turning half-formed ideas into things people rely on. My favorite part is making something complicated feel simple to use.</p>
+          <p>When I’m not coding, you’ll find me throwing a frisbee for Tessa, my mini Aussie (aka Potato), or watching the latest superhero movie.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="kind-words" class="story-section kind-words-section">
+      <div class="section-shell">
+        <div class="section-kicker">Kind words</div>
+        <h2 class="display-heading">From people I’ve worked with</h2>
+        <div class="quote-grid">
+          <figure class="quote-card">
+            <blockquote>One of those rare senior engineers who makes an entire team run better just by being on it. … She has an eye for polish and user experience that most backend-capable engineers simply don’t have.</blockquote>
+            <figcaption><strong>Ben Cooley</strong><br>Senior Software Engineer, former teammate</figcaption>
+          </figure>
+          <figure class="quote-card">
+            <blockquote>One of the most dedicated, intentional, and proactive members of the team. … I would recommend her to any team wanting an engineer or manager who can make meaningful additions from day-one.</blockquote>
+            <figcaption><strong>Josh Garwood</strong><br>Sr Manager, Software Engineering, worked with Carole for 10+ years</figcaption>
+          </figure>
+        </div>
+        <a class="text-link quote-more" href="https://www.linkedin.com/in/carole-zieler-a0594b4/" target="_blank" rel="noopener noreferrer">Read the full recommendations on LinkedIn →</a>
+      </div>
+    </section>
 
     <section id="contact" class="contact-section">
-  <div class="section-shell contact-box">
-    <div><div class="section-kicker">CONTACT</div><h2 class="display-heading">Have an idea?<br><span>Let’s see what it could become.</span></h2></div>
-    <a class="button button-primary" href="mailto:hello@czielerworks.app">Start a conversation <span>→</span></a>
-  </div>
-</section>
+      <div class="section-shell contact-box">
+        <div class="contact-intro">
+          <div class="section-kicker">Contact</div>
+          <h2 class="display-heading">Have an idea?<br><span>Let’s see what it could become.</span></h2>
+          <p>Send me a quick email about what you’re trying to build or fix, and I’ll get back to you as soon as possible.</p>
+        </div>
+
+        <div class="contact-action">
+          <a class="button button-primary" href="mailto:hello@czielerworks.app">Send me an email <span aria-hidden="true">→</span></a>
+          <a class="text-link" href="mailto:hello@czielerworks.app">hello@czielerworks.app</a>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer class="site-footer section-shell">
     <img id="footerLogo" src="./assets/logos/01_deep_navy_orange_neon_amber.png" alt="" aria-hidden="true">
@@ -253,6 +241,13 @@
       <a href="https://github.com/czieler" aria-label="GitHub" target="_blank" rel="noopener noreferrer">GitHub</a>
       <a href="https://www.linkedin.com/in/carole-zieler-a0594b4/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href="mailto:hello@czielerworks.app" aria-label="Email">Email</a>
+    </div>
+    <div class="footer-meta">
+      <p class="copyright">© <span id="copyrightYear">2026</span> CZieler Works</p>
+      <button id="themeSwitch" class="theme-switch" type="button" aria-label="Switch color scheme">
+        <span class="theme-switch__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        Switch colors
+      </button>
     </div>
   </footer>
 

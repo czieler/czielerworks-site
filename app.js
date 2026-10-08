@@ -43,16 +43,27 @@ const themes = [
 
 const SESSION_KEY = "czielerworks-theme";
 
-function chooseTheme() {
-  const existing = sessionStorage.getItem(SESSION_KEY);
-
-  if (existing) {
-    const saved = themes.find(theme => theme.id === existing);
-    if (saved) return saved;
+function readSavedThemeId() {
+  // The inline script in <head> picks the theme first; reuse its choice.
+  const fromHead = document.documentElement.dataset.theme;
+  if (fromHead) return fromHead;
+  try {
+    return sessionStorage.getItem(SESSION_KEY);
+  } catch {
+    return null; // Storage can be blocked (private browsing, strict settings).
   }
+}
+
+function chooseTheme() {
+  const saved = themes.find(theme => theme.id === readSavedThemeId());
+  if (saved) return saved;
 
   const selected = themes[Math.floor(Math.random() * themes.length)];
-  sessionStorage.setItem(SESSION_KEY, selected.id);
+  try {
+    sessionStorage.setItem(SESSION_KEY, selected.id);
+  } catch {
+    // Without storage the theme simply may change on the next page load.
+  }
   return selected;
 }
 
@@ -68,6 +79,7 @@ function applyTheme(theme) {
     if (img) img.src = theme.logo;
   });
 
+  document.documentElement.dataset.theme = theme.id;
   document.body.dataset.theme = theme.id;
 
   const napkinArt = document.getElementById("napkinArt");
@@ -93,5 +105,28 @@ function setupNavigation() {
   });
 }
 
+function setupThemeSwitch() {
+  const button = document.getElementById("themeSwitch");
+  if (!button) return;
+
+  button.addEventListener("click", () => {
+    const current = themes.findIndex(theme => theme.id === document.documentElement.dataset.theme);
+    const next = themes[(current + 1) % themes.length];
+    applyTheme(next);
+    try {
+      sessionStorage.setItem(SESSION_KEY, next.id);
+    } catch {
+      // Without storage the new colors last until the page reloads.
+    }
+  });
+}
+
+function setCopyrightYear() {
+  const year = document.getElementById("copyrightYear");
+  if (year) year.textContent = String(new Date().getFullYear());
+}
+
 applyTheme(chooseTheme());
 setupNavigation();
+setupThemeSwitch();
+setCopyrightYear();
