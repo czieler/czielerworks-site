@@ -1,15 +1,14 @@
 # CZieler Works
 
-Portfolio and consulting site for **CZieler Works**.
+Site for **CZieler Works**, currently closed to new client projects while Carole focuses on work at her day job.
 
-The site is intentionally lightweight: semantic HTML, vanilla CSS, and a small amount of JavaScript. It showcases selected apps and projects, describes development services, and provides contact links.
+The site is intentionally lightweight: semantic HTML, vanilla CSS, and a small amount of JavaScript. It shares the shop's current status and links to Carole's GitHub profile and Where I'm Watching app.
 
 ## Highlights
 
-- Responsive single-page layout
+- Responsive single-page status page
 - Five brand color themes selected once per browser session
 - Theme-matched logo and illustration assets
-- Mobile navigation
 - Accessible semantic structure and keyboard-friendly controls
 - No framework or build step required
 

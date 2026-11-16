@@ -292,6 +292,11 @@ img {
   gap: 18px;
 }
 
+.hero-copy > .text-link {
+  display: inline-block;
+  margin-top: 14px;
+}
+
 /* Value strip */
 
 .value-strip {
